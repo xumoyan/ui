@@ -4,23 +4,23 @@ import 'package:intl/intl.dart';
 import 'package:polkawallet_sdk/api/types/balanceData.dart';
 
 class Fmt {
-  static String dateTime(DateTime time) {
+  static String dateTime(DateTime? time) {
     if (time == null) {
       return 'date-time';
     }
     return DateFormat.yMd().add_Hm().format(time.toLocal());
   }
 
-  static String blockToTime(int blocks, int blockDuration) {
+  static String blockToTime(int? blocks, int blockDuration) {
     if (blocks == null) return '~';
 
-    int blocksOfMin = 60000 ~/ blockDuration;
-    int blocksOfHour = 60 * blocksOfMin;
-    int blocksOfDay = 24 * blocksOfHour;
+    final blocksOfMin = 60000 ~/ blockDuration;
+    final blocksOfHour = 3600000 ~/ blockDuration;
+    final blocksOfDay = 24 * 3600000 ~/ blockDuration;
 
-    int day = (blocks / blocksOfDay).floor();
-    int hour = (blocks % blocksOfDay / blocksOfHour).floor();
-    int min = (blocks % blocksOfHour / blocksOfMin).floor();
+    final day = (blocks / blocksOfDay).floor();
+    final hour = (blocks % blocksOfDay / blocksOfHour).floor();
+    final min = (blocks % blocksOfHour / blocksOfMin).floor();
 
     String res = '$min mins';
 
@@ -32,7 +32,7 @@ class Fmt {
     return res;
   }
 
-  static String address(String addr, {int pad = 6}) {
+  static String? address(String? addr, {int pad = 6}) {
     if (addr == null || addr.length == 0) {
       return addr;
     }
@@ -49,14 +49,14 @@ class Fmt {
     return reg.hasMatch(hex);
   }
 
-  static BigInt balanceTotal(BalanceData balance) {
+  static BigInt balanceTotal(BalanceData? balance) {
     return balanceInt((balance?.freeBalance ?? 0).toString()) +
         balanceInt((balance?.reservedBalance ?? 0).toString());
   }
 
   /// number transform 1:
   /// from raw <String> of Api data to <BigInt>
-  static BigInt balanceInt(String raw) {
+  static BigInt balanceInt(String? raw) {
     if (raw == null || raw.length == 0) {
       return BigInt.zero;
     }
@@ -69,7 +69,7 @@ class Fmt {
 
   /// number transform 2:
   /// from <BigInt> to <double>
-  static double bigIntToDouble(BigInt value, int decimals) {
+  static double bigIntToDouble(BigInt? value, int decimals) {
     if (value == null) {
       return 0;
     }
@@ -79,7 +79,7 @@ class Fmt {
   /// number transform 3:
   /// from <double> to <String> in token format of ",##0.000"
   static String doubleFormat(
-    double value, {
+    double? value, {
     int length = 4,
     int round = 0,
   }) {
@@ -94,7 +94,7 @@ class Fmt {
   /// combined number transform 1-3:
   /// from raw <String> to <String> in token format of ",##0.000"
   static String balance(
-    String raw,
+    String? raw,
     int decimals, {
     int length = 4,
   }) {
@@ -114,7 +114,7 @@ class Fmt {
   /// combined number transform 2-3:
   /// from <BigInt> to <String> in token format of ",##0.000"
   static String token(
-    BigInt value,
+    BigInt? value,
     int decimals, {
     int length = 4,
   }) {
@@ -126,14 +126,14 @@ class Fmt {
 
   /// number transform 4:
   /// from <String of double> to <BigInt>
-  static BigInt tokenInt(String value, int decimals) {
+  static BigInt tokenInt(String? value, int decimals) {
     if (value == null) {
       return BigInt.zero;
     }
     double v = 0;
     try {
       if (value.contains(',') || value.contains('.')) {
-        v = NumberFormat(",##0.${"0" * decimals}").parse(value);
+        v = NumberFormat(",##0.${"0" * decimals}").parse(value) as double;
       } else {
         v = double.parse(value);
       }
@@ -147,14 +147,14 @@ class Fmt {
   /// from <BigInt> to <String> in price format of ",##0.00"
   /// ceil number of last decimal
   static String priceCeil(
-    double value, {
+    double? value, {
     int lengthFixed = 2,
-    int lengthMax,
+    int? lengthMax,
   }) {
     if (value == null) {
       return '~';
     }
-    final int x = pow(10, lengthMax ?? lengthFixed);
+    final int x = pow(10, lengthMax ?? lengthFixed) as int;
     final double price = (value * x).ceilToDouble() / x;
     final String tailDecimals =
         lengthMax == null ? '' : "#" * (lengthMax - lengthFixed);
@@ -168,14 +168,14 @@ class Fmt {
   /// from <BigInt> to <String> in price format of ",##0.00"
   /// floor number of last decimal
   static String priceFloor(
-    double value, {
+    double? value, {
     int lengthFixed = 2,
-    int lengthMax,
+    int? lengthMax,
   }) {
     if (value == null) {
       return '~';
     }
-    final int x = pow(10, lengthMax ?? lengthFixed);
+    final int x = pow(10, lengthMax ?? lengthFixed) as int;
     final double price = (value * x).floorToDouble() / x;
     final String tailDecimals =
         lengthMax == null ? '' : "#" * (lengthMax - lengthFixed);
@@ -193,10 +193,10 @@ class Fmt {
   }
 
   static String priceCeilBigInt(
-    BigInt value,
+    BigInt? value,
     int decimals, {
     int lengthFixed = 2,
-    int lengthMax,
+    int? lengthMax,
   }) {
     if (value == null) {
       return '~';
@@ -206,10 +206,10 @@ class Fmt {
   }
 
   static String priceFloorBigInt(
-    BigInt value,
+    BigInt? value,
     int decimals, {
     int lengthFixed = 2,
-    int lengthMax,
+    int? lengthMax,
   }) {
     if (value == null) {
       return '~';

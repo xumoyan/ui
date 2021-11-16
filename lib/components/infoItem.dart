@@ -13,37 +13,41 @@ class InfoItem extends StatelessWidget {
     this.lowTitle = false,
     this.titleToolTip,
   });
-  final String title;
-  final String content;
-  final Color color;
-  final Color titleColor;
-  final CrossAxisAlignment crossAxisAlignment;
+  final String? title;
+  final String? content;
+  final Color? color;
+  final Color? titleColor;
+  final CrossAxisAlignment? crossAxisAlignment;
   final int flex;
   final bool lowTitle;
-  final String titleToolTip;
+  final String? titleToolTip;
   @override
   Widget build(BuildContext context) {
     final textColor = color ?? Theme.of(context).unselectedWidgetColor;
     final List<Widget> res = [
       titleToolTip != null
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 4),
-                  child: TapTooltip(
-                    message: titleToolTip,
-                    child: Icon(
+          ? Container(
+              child: TapTooltip(
+                message: titleToolTip!,
+                child: Center(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
                       Icons.info,
                       color: Theme.of(context).disabledColor,
                       size: 14,
                     ),
-                  ),
-                ),
-                Text(title, style: TextStyle(fontSize: 12, color: titleColor))
-              ],
+                    Container(
+                      margin: EdgeInsets.only(left: 4),
+                      child: Text(title!,
+                          style: TextStyle(fontSize: 12, color: titleColor)),
+                    )
+                  ],
+                )),
+              ),
             )
-          : Text(title, style: TextStyle(fontSize: 12, color: titleColor)),
+          : Text(title!, style: TextStyle(fontSize: 12, color: titleColor)),
       Text(
         content ?? '-',
         style: TextStyle(

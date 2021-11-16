@@ -1,3 +1,29 @@
+## [0.3.6] - 20211101.
+
+* bump polkawallet_sdk: 0.3.7.
+* use Visibility widget.
+
+## [0.3.5] - 20211025.
+
+* bump polkawallet_sdk: 0.3.6.
+* fix extension sign page title.
+
+## [0.3.4] - 20211019.
+
+* bump polkawallet_sdk: 0.3.5.
+* add disabledCalls params in TxConfirmPage.
+
+## [0.3.3] - 20210928.
+
+* bump polkawallet_sdk: 0.3.3.
+* bump flutter_qr_scan 1.0.7 hosted.
+* support flutter 2.5.x.
+
+## [0.3.2] - 20210913.
+
+* bump polkawallet_sdk: 0.3.2.
+* null-safety support.
+
 ## [0.3.0] - 20210826.
 
 * bump polkawallet_sdk: 0.3.0.

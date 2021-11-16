@@ -8,7 +8,7 @@ import 'package:polkawallet_ui/components/roundedCard.dart';
 import 'package:polkawallet_ui/components/textTag.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
 import 'package:polkawallet_ui/utils/index.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_flutter_fork/qr_flutter_fork.dart';
 
 import 'package:polkawallet_sdk/utils/i18n.dart';
 
@@ -21,7 +21,7 @@ class AccountQrCodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dic = I18n.of(context).getDic(i18n_full_dic_ui, 'account');
+    final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'account')!;
 
     final codeAddress =
         'substrate:${keyring.current.address}:${keyring.current.pubKey}:${keyring.current.name}';
@@ -33,7 +33,7 @@ class AccountQrCodePage extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0,
-        title: Text(dic['receive']),
+        title: Text(dic['receive']!),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -43,13 +43,12 @@ class AccountQrCodePage extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(32, 16, 32, 16),
               child: Column(
                 children: <Widget>[
-                  keyring.current.observation ?? false
-                      ? Container(
-                          margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
-                          child:
-                              TextTag(dic['warn.external'], color: Colors.red),
-                        )
-                      : Container(),
+                  Visibility(
+                      visible: keyring.current.observation ?? false,
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                        child: TextTag(dic['warn.external'], color: Colors.red),
+                      )),
                   Padding(
                     padding: EdgeInsets.only(top: 24, bottom: 8),
                     child: AddressIcon(
@@ -80,14 +79,14 @@ class AccountQrCodePage extends StatelessWidget {
                   ),
                   Container(
                     width: qrWidth,
-                    child: Text(keyring.current.address),
+                    child: Text(keyring.current.address!),
                   ),
                   Container(
                     width: qrWidth,
                     padding: EdgeInsets.only(top: 16, bottom: 24),
                     child: RoundedButton(
-                      text: I18n.of(context)
-                          .getDic(i18n_full_dic_ui, 'common')['copy'],
+                      text: I18n.of(context)!
+                          .getDic(i18n_full_dic_ui, 'common')!['copy'],
                       onPressed: () =>
                           UI.copyAndNotify(context, keyring.current.address),
                     ),

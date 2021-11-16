@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:polkawallet_sdk/plugin/index.dart';
 import 'package:polkawallet_sdk/storage/keyring.dart';
+import 'package:polkawallet_sdk/webviewWithExtension/types/signExtrinsicParam.dart';
 import 'package:polkawallet_sdk/webviewWithExtension/webviewWithExtension.dart';
 import 'package:polkawallet_ui/pages/walletExtensionSignPage.dart';
 
@@ -21,7 +22,7 @@ class _DAppWrapperPageState extends State<DAppWrapperPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String url = ModalRoute.of(context).settings.arguments;
+    final String url = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -42,17 +43,21 @@ class _DAppWrapperPageState extends State<DAppWrapperPage> {
                 });
               },
               onSignBytesRequest: (req) async {
-                final signed = await Navigator.of(context)
-                    .pushNamed(WalletExtensionSignPage.route, arguments: req);
+                final signed = (await Navigator.of(context).pushNamed(
+                    WalletExtensionSignPage.route,
+                    arguments: req) as ExtensionSignResult);
                 return signed;
               },
               onSignExtrinsicRequest: (req) async {
-                final signed = await Navigator.of(context)
-                    .pushNamed(WalletExtensionSignPage.route, arguments: req);
+                final signed = (await Navigator.of(context).pushNamed(
+                    WalletExtensionSignPage.route,
+                    arguments: req) as ExtensionSignResult);
                 return signed;
               },
             ),
-            _loading ? Center(child: CupertinoActivityIndicator()) : Container()
+            Visibility(
+                visible: _loading,
+                child: Center(child: CupertinoActivityIndicator()))
           ],
         ),
       ),

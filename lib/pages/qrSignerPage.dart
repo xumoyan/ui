@@ -5,7 +5,7 @@ import 'package:polkawallet_sdk/storage/keyring.dart';
 import 'package:polkawallet_ui/components/addressFormItem.dart';
 import 'package:polkawallet_ui/components/textTag.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_flutter_fork/qr_flutter_fork.dart';
 import 'package:polkawallet_sdk/utils/i18n.dart';
 
 class QrSignerPage extends StatelessWidget {
@@ -18,11 +18,11 @@ class QrSignerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dic = I18n.of(context).getDic(i18n_full_dic_ui, 'account');
-    final text = ModalRoute.of(context).settings.arguments;
+    final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'account')!;
+    final text = ModalRoute.of(context)!.settings.arguments!;
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(title: Text(dic['uos.title']), centerTitle: true),
+      appBar: AppBar(title: Text(dic['uos.title']!), centerTitle: true),
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.all(16),
@@ -46,9 +46,9 @@ class QrSignerPage extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 16, bottom: 8),
-                  child: Text(dic['uos.push']),
+                  child: Text(dic['uos.push']!),
                 ),
-                QrImage(data: text, size: screenWidth - 24),
+                QrImage(data: text as String, size: screenWidth - 24),
               ],
             )
           ],
