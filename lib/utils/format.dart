@@ -1,7 +1,10 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:polkawallet_sdk/api/types/balanceData.dart';
+import 'package:polkawallet_sdk/utils/i18n.dart';
+import 'package:polkawallet_ui/utils/i18n.dart';
 
 class Fmt {
   static String dateTime(DateTime? time) {
@@ -11,8 +14,10 @@ class Fmt {
     return DateFormat.yMd().add_Hm().format(time.toLocal());
   }
 
-  static String blockToTime(int? blocks, int blockDuration) {
+  static String blockToTime(int? blocks, int blockDuration,
+      {String locale = 'en'}) {
     if (blocks == null) return '~';
+    print(locale);
 
     final blocksOfMin = 60000 ~/ blockDuration;
     final blocksOfHour = 3600000 ~/ blockDuration;
@@ -22,19 +27,20 @@ class Fmt {
     final hour = (blocks % blocksOfDay / blocksOfHour).floor();
     final min = (blocks % blocksOfHour / blocksOfMin).floor();
 
-    String res = '$min mins';
+    String res = '$min ${locale.contains('zh') ? "分钟" : "mins"}';
 
     if (day > 0) {
-      res = '$day days $hour hrs';
+      res =
+          '$day ${locale.contains('zh') ? "天" : "days"} $hour ${locale.contains('zh') ? "小时" : "hrs"}';
     } else if (hour > 0) {
-      res = '$hour hrs $res';
+      res = '$hour ${locale.contains('zh') ? "小时" : "hrs"} $res';
     }
     return res;
   }
 
-  static String? address(String? addr, {int pad = 6}) {
+  static String address(String? addr, {int pad = 6}) {
     if (addr == null || addr.length == 0) {
-      return addr;
+      return 'address';
     }
     return addr.substring(0, pad) + '...' + addr.substring(addr.length - pad);
   }
@@ -158,10 +164,7 @@ class Fmt {
     final double price = (value * x).ceilToDouble() / x;
     final String tailDecimals =
         lengthMax == null ? '' : "#" * (lengthMax - lengthFixed);
-    return NumberFormat(
-            ",##0${lengthFixed > 0 ? '.' : ''}${"0" * lengthFixed}$tailDecimals",
-            "en_US")
-        .format(price);
+    return "${NumberFormat(",##0${lengthFixed > 0 ? '.' : ''}${"0" * lengthFixed}$tailDecimals", "en_US").format(price)}";
   }
 
   /// number transform 6:
@@ -179,10 +182,7 @@ class Fmt {
     final double price = (value * x).floorToDouble() / x;
     final String tailDecimals =
         lengthMax == null ? '' : "#" * (lengthMax - lengthFixed);
-    return NumberFormat(
-            ",##0${lengthFixed > 0 ? '.' : ''}${"0" * lengthFixed}$tailDecimals",
-            "en_US")
-        .format(price);
+    return "${NumberFormat(",##0${lengthFixed > 0 ? '.' : ''}${"0" * lengthFixed}$tailDecimals", "en_US").format(price)}";
   }
 
   /// number transform 7:
@@ -217,4 +217,64 @@ class Fmt {
     return priceFloor(Fmt.bigIntToDouble(value, decimals),
         lengthFixed: lengthFixed, lengthMax: lengthMax);
   }
+
+  static String? validatePrice(String value, BuildContext context) {
+    final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common');
+
+    final v = value.trim();
+    try {
+      if (v.isEmpty || double.parse(v.trim()) == 0) {
+        return dic!['amount.error'];
+      }
+    } catch (e) {
+      return dic!['amount.error'];
+    }
+    return null;
+  }
+
+  static String priceFloorFormatter(
+    double? value, {
+    int lengthFixed = 2,
+    int? lengthMax,
+  }) {
+    if (value == null) {
+      return '~';
+    }
+    final int x = pow(10, lengthMax ?? lengthFixed) as int;
+    final PriceFormatter pf = PriceFormatter.init(value);
+    final double price = (pf.price * x).floorToDouble() / x;
+    final String tailDecimals =
+        lengthMax == null ? '' : "#" * (lengthMax - lengthFixed);
+    return "${NumberFormat(",##0${lengthFixed > 0 ? '.' : ''}${"0" * lengthFixed}$tailDecimals", "en_US").format(price)}${pf.unit}";
+  }
+
+  static String priceFloorBigIntFormatter(
+    BigInt? value,
+    int decimals, {
+    int lengthFixed = 2,
+    int? lengthMax,
+  }) {
+    if (value == null) {
+      return '~';
+    }
+    return priceFloorFormatter(Fmt.bigIntToDouble(value, decimals),
+        lengthFixed: lengthFixed, lengthMax: lengthMax);
+  }
+}
+
+class PriceFormatter {
+  PriceFormatter.init(double price) {
+    var suffix = [' ', 'k', 'M', 'B', 'T', 'P', 'E'];
+    if (price < 1000) {
+      this.price = price;
+      this.unit = '';
+    } else {
+      for (int i = 1; i < suffix.length && price >= 1000; price /= 1000, i++) {
+        this.price = price / 1000;
+        this.unit = suffix[i];
+      }
+    }
+  }
+  double price = 0;
+  String unit = '';
 }

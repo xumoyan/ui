@@ -9,39 +9,43 @@ class TxConfirmParams {
   TxConfirmParams(
       {this.module,
       this.call,
-      this.txDisplay,
+      this.txDisplay = const {},
+      this.txDisplayBold = const {},
       this.params,
       this.rawParams,
       this.isUnsigned,
       this.txTitle,
-      this.txName});
+      this.txName,
+      this.isPlugin = false});
   final String? module;
   final String? call;
   final List? params;
   final String? rawParams;
   final bool? isUnsigned;
-  final Map? txDisplay;
+  final Map txDisplay;
+  final Map<String, Widget> txDisplayBold;
   final String? txTitle;
   final String? txName;
+  final bool isPlugin;
 }
 
 class TxButton extends StatelessWidget {
   TxButton({
     this.text,
-    this.getTxParams,
+    required this.getTxParams,
     this.onFinish,
     this.icon,
     this.color,
   });
 
   final String? text;
-  final Future<TxConfirmParams> Function()? getTxParams;
+  final Future<TxConfirmParams?> Function() getTxParams;
   final Function(Map?)? onFinish;
   final Widget? icon;
   final Color? color;
 
   Future<void> _onPressed(BuildContext context) async {
-    final params = await getTxParams!();
+    final params = await getTxParams();
     if (params != null) {
       final res = await Navigator.of(context)
           .pushNamed(TxConfirmPage.route, arguments: params);

@@ -36,12 +36,11 @@ class UI {
         '${(acc.observation ?? false) ? ' (${I18n.of(context)!.getDic(i18n_full_dic_ui, 'account')!['observe']})' : ''}';
   }
 
-  static Widget accountDisplayName(
-    String? address,
-    Map? accInfo, {
-    bool expand = true,
-    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
-  }) {
+  static Widget accountDisplayName(String? address, Map? accInfo,
+      {bool expand = true,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+      Color textColor = const Color(0xFF565554),
+      TextStyle? style}) {
     bool hasId = false;
     bool good = false;
     if (accInfo != null) {
@@ -72,34 +71,44 @@ class UI {
                     : Icon(
                         Icons.remove_circle,
                         size: 16,
-                        color: Colors.black12,
+                        color: Colors.grey,
                       ),
               )
             : Container(width: 1, height: 2),
         expand
             ? Expanded(
-                child: Text(accountDisplayNameString(address, accInfo)!,
-                    overflow: TextOverflow.ellipsis),
+                child: Text(accountDisplayNameString(address, accInfo),
+                    overflow: TextOverflow.ellipsis,
+                    style: style ??
+                        TextStyle(
+                            fontSize: 12,
+                            fontFamily: "TitilliumWeb",
+                            fontWeight: FontWeight.w400,
+                            color: textColor)),
               )
-            : Text(accountDisplayNameString(address, accInfo)!,
-                overflow: TextOverflow.ellipsis)
+            : Text(accountDisplayNameString(address, accInfo),
+                overflow: TextOverflow.ellipsis,
+                style: style ??
+                    TextStyle(
+                        fontSize: 12,
+                        fontFamily: "TitilliumWeb",
+                        fontWeight: FontWeight.w400,
+                        color: textColor))
       ],
     );
   }
 
-  static String? accountDisplayNameString(String? address, Map? accInfo,
+  static String accountDisplayNameString(String? address, Map? accInfo,
       [String? localName]) {
-    String? display = localName ?? Fmt.address(address, pad: 6);
+    String display = localName?.toUpperCase() ?? Fmt.address(address, pad: 6);
     if (accInfo != null) {
       if (accInfo['identity']['display'] != null) {
         display = accInfo['identity']['display'];
         if (accInfo['identity']['displayParent'] != null) {
           display = '${accInfo['identity']['displayParent']}/$display';
         }
-      } else if (accInfo['accountIndex'] != null) {
-        display = accInfo['accountIndex'];
       }
-      display = display!.toUpperCase();
+      display = display.toUpperCase();
     }
     return display;
   }
@@ -109,15 +118,33 @@ class UI {
         '^[0-9]{0,$decimals}((\\.|,)[0-9]{0,$decimals})?\$');
   }
 
-  static Future<void> launchURL(String url) async {
-    if (await canLaunch(url)) {
-      try {
-        await launch(url);
-      } catch (err) {
-        print(err);
+  static launchURL(String url) {
+    throttle(() async {
+      if (await canLaunch(url)) {
+        try {
+          await launch(url);
+        } catch (err) {
+          print(err);
+        }
+      } else {
+        print('Could not launch $url');
       }
-    } else {
-      print('Could not launch $url');
+    });
+  }
+
+  static const Duration _KDelay = Duration(milliseconds: 500);
+  static var enable = true;
+
+  static throttle(
+    Function func, {
+    Duration delay = _KDelay,
+  }) {
+    if (enable) {
+      func();
+      enable = false;
+      Future.delayed(delay, () {
+        enable = true;
+      });
     }
   }
 }

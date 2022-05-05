@@ -4,7 +4,9 @@ import 'package:flutter_qr_scan/qrcode_reader_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:polkawallet_sdk/plugin/index.dart';
 import 'package:polkawallet_sdk/storage/keyring.dart';
+import 'package:polkawallet_sdk/utils/i18n.dart';
 import 'package:polkawallet_ui/utils/format.dart';
+import 'package:polkawallet_ui/utils/i18n.dart';
 
 class ScanPage extends StatelessWidget {
   ScanPage(this.plugin, this.keyring);
@@ -26,6 +28,23 @@ class ScanPage extends StatelessWidget {
       String address = '';
       final String data = txt!.trim();
       if (data != null) {
+        if (data.contains("polkawallet.io")) {
+          final paths = data.toString().split("polkawallet.io");
+          Map<dynamic, dynamic> args = Map<dynamic, dynamic>();
+          if (paths.length > 1) {
+            final pathDatas = paths[1].split("?");
+            if (pathDatas.length > 1) {
+              final datas = pathDatas[1].split("&");
+              datas.forEach((element) {
+                args[element.split("=")[0]] =
+                    Uri.decodeComponent(element.split("=")[1]);
+              });
+            }
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed(pathDatas[0], arguments: args);
+          }
+          return;
+        }
         List<String> ls = data.split(':');
 
         if (ls[0] == 'wc') {
@@ -74,6 +93,7 @@ class ScanPage extends StatelessWidget {
       }
     }
 
+    final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common')!;
     return Scaffold(
       body: FutureBuilder<bool>(
         future: canOpenCamera(),
@@ -90,6 +110,7 @@ class ScanPage extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
+                helpWidget: Text(dic['scan.help']!),
                 onScan: onScan);
           } else {
             return Container();
