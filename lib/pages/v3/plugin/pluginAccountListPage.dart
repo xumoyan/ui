@@ -8,6 +8,7 @@ import 'package:polkawallet_ui/components/v3/back.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginAddressFormItem.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginScaffold.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
+import 'package:polkawallet_ui/utils/Utils.dart';
 
 class PluginAccountListPageParams {
   PluginAccountListPageParams({this.list, this.title});
@@ -25,9 +26,7 @@ class PluginAccountListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PluginAccountListPageParams args = ModalRoute.of(context)!
-        .settings
-        .arguments as PluginAccountListPageParams;
+    final PluginAccountListPageParams args = Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as PluginAccountListPageParams;
     return PluginScaffold(
       appBar: PluginAppBar(
         title: Text(args.title ??

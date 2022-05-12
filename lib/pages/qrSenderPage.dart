@@ -13,6 +13,7 @@ import 'package:polkawallet_ui/components/v3/button.dart';
 import 'package:polkawallet_ui/pages/scanPage.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
 import 'package:qr_flutter_fork/qr_flutter_fork.dart';
+import 'package:polkawallet_ui/utils/Utils.dart';
 
 class QrSenderPageParams {
   QrSenderPageParams(this.txInfo, this.params, {this.rawParams});
@@ -41,7 +42,7 @@ class _QrSenderPageState extends State<QrSenderPage> {
     }
 
     final QrSenderPageParams args =
-        ModalRoute.of(context)!.settings.arguments as QrSenderPageParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as QrSenderPageParams;
 
     final Map? res = await widget.plugin.sdk.api.uos
         .makeQrCode(args.txInfo, args.params!, rawParam: args.rawParams);

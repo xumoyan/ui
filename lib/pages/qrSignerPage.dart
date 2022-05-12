@@ -8,6 +8,7 @@ import 'package:polkawallet_ui/components/v3/back.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
 import 'package:qr_flutter_fork/qr_flutter_fork.dart';
 import 'package:polkawallet_sdk/utils/i18n.dart';
+import 'package:polkawallet_ui/utils/Utils.dart';
 
 class QrSignerPage extends StatelessWidget {
   QrSignerPage(this.plugin, this.keyring);
@@ -20,7 +21,7 @@ class QrSignerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'account')!;
-    final text = ModalRoute.of(context)!.settings.arguments!;
+    final text = Utils.getParams(ModalRoute.of(context)!.settings.arguments! as Map<String, dynamic>);
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(

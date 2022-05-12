@@ -41,7 +41,7 @@ class ScanPage extends StatelessWidget {
               });
             }
             Navigator.of(context).pop();
-            Navigator.of(context).pushNamed(pathDatas[0], arguments: args);
+            Navigator.of(context).pushNamed(pathDatas[0], arguments: {'params': args});
           }
           return;
         }

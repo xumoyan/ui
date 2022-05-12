@@ -12,6 +12,7 @@ import 'package:polkawallet_ui/components/infoItemRow.dart';
 import 'package:polkawallet_ui/components/v3/back.dart';
 import 'package:polkawallet_ui/utils/format.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
+import 'package:polkawallet_ui/utils/Utils.dart';
 
 class WalletExtensionSignPage extends StatefulWidget {
   WalletExtensionSignPage(this.plugin, this.keyring, this.getPassword);
@@ -44,7 +45,7 @@ class _WalletExtensionSignPageState extends State<WalletExtensionSignPage> {
       _submitting = true;
     });
     final SignAsExtensionParam args =
-        ModalRoute.of(context)!.settings.arguments as SignAsExtensionParam;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as SignAsExtensionParam;
     final res = await (widget.plugin.sdk.api.keyring
         .signAsExtension(password, args) as FutureOr<ExtensionSignResult>);
     if (mounted) {
@@ -62,7 +63,7 @@ class _WalletExtensionSignPageState extends State<WalletExtensionSignPage> {
   Widget build(BuildContext context) {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common')!;
     final SignAsExtensionParam args =
-        ModalRoute.of(context)!.settings.arguments as SignAsExtensionParam;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as SignAsExtensionParam;
     final address = args.msgType == WalletExtensionSignPage.signTypeBytes
         ? SignBytesRequest.fromJson(
                 Map<String?, dynamic>.of(args.request as Map<String?, dynamic>)

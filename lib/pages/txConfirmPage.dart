@@ -16,6 +16,7 @@ import 'package:polkawallet_ui/pages/accountListPage.dart';
 import 'package:polkawallet_ui/pages/qrSenderPage.dart';
 import 'package:polkawallet_ui/utils/format.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
+import 'package:polkawallet_ui/utils/Utils.dart';
 
 class TxConfirmPage extends StatefulWidget {
   const TxConfirmPage(this.plugin, this.keyring, this.getPassword,
@@ -56,7 +57,7 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
     }
 
     final TxConfirmParams args =
-        ModalRoute.of(context)!.settings.arguments as TxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
     final sender = TxSenderData(
         widget.keyring.current.address, widget.keyring.current.pubKey);
     final txInfo =
@@ -78,7 +79,7 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
       accounts.addAll(widget.keyring.externals);
       final acc = await Navigator.of(context).pushNamed(
         AccountListPage.route,
-        arguments: AccountListPageParams(list: accounts),
+        arguments: {'params': AccountListPageParams(list: accounts)},
       );
       if (acc != null) {
         setState(() {
@@ -134,7 +135,7 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
   Future<void> _showPasswordDialog(BuildContext context) async {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common');
     final TxConfirmParams args =
-        ModalRoute.of(context)!.settings.arguments as TxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
 
     if ((await widget.txDisabledCalls) != null) {
       List moduleCalls = (await widget.txDisabledCalls)![args.module] ?? [];
@@ -183,7 +184,7 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
   }) async {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common')!;
     final TxConfirmParams args =
-        ModalRoute.of(context)!.settings.arguments as TxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
 
     if (viaQr && (await widget.txDisabledCalls) != null) {
       List moduleCalls = (await widget.txDisabledCalls)![args.module] ?? [];
@@ -230,7 +231,7 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
   bool _checkCallDisabled(List disabledCalls) {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common')!;
     final TxConfirmParams args =
-        ModalRoute.of(context)!.settings.arguments as TxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
     if (disabledCalls.contains(args.call)) {
       showCupertinoDialog(
         context: context,
@@ -284,11 +285,11 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
     print('show qr');
     final signed = await Navigator.of(context).pushNamed(
       QrSenderPage.route,
-      arguments: QrSenderPageParams(
+      arguments: {'params': QrSenderPageParams(
         txInfo,
         args.params,
         rawParams: args.rawParams,
-      ),
+      )},
     );
     if (signed == null) {
       throw Exception(dic!['tx.cancelled']);
@@ -352,7 +353,7 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
     final int decimals = (widget.plugin.networkState.tokenDecimals ?? [12])[0];
 
     final TxConfirmParams args =
-        ModalRoute.of(context)!.settings.arguments as TxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
 
     final bool isObservation = widget.keyring.current.observation ?? false;
     final bool isProxyObservation =

@@ -28,6 +28,7 @@ import 'package:polkawallet_ui/components/v3/sliderThumbShape.dart';
 import 'package:polkawallet_ui/utils/consts.dart';
 import 'package:polkawallet_ui/utils/format.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
+import 'package:polkawallet_ui/utils/Utils.dart';
 
 class XcmTxConfirmPage extends StatefulWidget {
   const XcmTxConfirmPage(this.plugin, this.keyring, this.getPassword,
@@ -77,7 +78,7 @@ class _XcmTxConfirmPageState extends State<XcmTxConfirmPage> {
 
   Future<String> _getTxFee({bool reload = false}) async {
     final args =
-        ModalRoute.of(context)!.settings.arguments as XcmTxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as XcmTxConfirmParams;
     final sender = TxSenderData(
         widget.keyring.current.address, widget.keyring.current.pubKey);
     final txInfo =
@@ -130,7 +131,7 @@ class _XcmTxConfirmPageState extends State<XcmTxConfirmPage> {
   Future<void> _showPasswordDialog(BuildContext context) async {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common');
     final args =
-        ModalRoute.of(context)!.settings.arguments as XcmTxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as XcmTxConfirmParams;
 
     if ((await widget.txDisabledCalls) != null) {
       List moduleCalls = (await widget.txDisabledCalls)![args.module] ?? [];
@@ -148,7 +149,7 @@ class _XcmTxConfirmPageState extends State<XcmTxConfirmPage> {
   Future<void> _onSubmit(BuildContext context, {String? password}) async {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common')!;
     final args =
-        ModalRoute.of(context)!.settings.arguments as XcmTxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as XcmTxConfirmParams;
 
     setState(() {
       _submitting = true;
@@ -183,7 +184,7 @@ class _XcmTxConfirmPageState extends State<XcmTxConfirmPage> {
   bool _checkCallDisabled(List disabledCalls) {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common')!;
     final args =
-        ModalRoute.of(context)!.settings.arguments as XcmTxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as XcmTxConfirmParams;
     if (disabledCalls.contains(args.call)) {
       showCupertinoDialog(
         context: context,
@@ -252,7 +253,7 @@ class _XcmTxConfirmPageState extends State<XcmTxConfirmPage> {
 
   void _updateTxStatus(BuildContext context, String status) {
     final args =
-        ModalRoute.of(context)!.settings.arguments as XcmTxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as XcmTxConfirmParams;
     if (args.waitingWidget == null) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       if (mounted) {
@@ -302,7 +303,7 @@ class _XcmTxConfirmPageState extends State<XcmTxConfirmPage> {
     final dicAcc = I18n.of(context)!.getDic(i18n_full_dic_ui, 'account')!;
 
     final args =
-        ModalRoute.of(context)!.settings.arguments as XcmTxConfirmParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as XcmTxConfirmParams;
 
     final isNetworkConnected = widget.plugin.sdk.api.connectedNode != null;
     final isNetworkMatch = widget.plugin.networkState.genesisHash ==

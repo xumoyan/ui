@@ -6,6 +6,7 @@ import 'package:polkawallet_sdk/storage/types/keyPairData.dart';
 import 'package:polkawallet_sdk/utils/i18n.dart';
 import 'package:polkawallet_ui/components/accountSelectList.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
+import 'package:polkawallet_ui/utils/Utils.dart';
 
 class AccountListPageParams {
   AccountListPageParams({this.list, this.title});
@@ -24,7 +25,7 @@ class AccountListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AccountListPageParams args =
-        ModalRoute.of(context)!.settings.arguments as AccountListPageParams;
+        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as AccountListPageParams;
     return Scaffold(
       appBar: AppBar(
         title: Text(args.title ??

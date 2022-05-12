@@ -8,6 +8,7 @@ import 'package:polkawallet_ui/components/v3/back.dart';
 import 'package:polkawallet_ui/components/v3/iconButton.dart' as v3;
 import 'package:polkawallet_ui/pages/walletExtensionSignPage.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:polkawallet_ui/utils/Utils.dart';
 
 class DAppWrapperPage extends StatefulWidget {
   DAppWrapperPage(this.plugin, this.keyring);
@@ -28,7 +29,7 @@ class _DAppWrapperPageState extends State<DAppWrapperPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String url = ModalRoute.of(context)!.settings.arguments as String;
+    final String url = Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as String;
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
@@ -83,13 +84,13 @@ class _DAppWrapperPageState extends State<DAppWrapperPage> {
                 onSignBytesRequest: (req) async {
                   final signed = (await Navigator.of(context).pushNamed(
                       WalletExtensionSignPage.route,
-                      arguments: req) as ExtensionSignResult);
+                      arguments: {'params': req}) as ExtensionSignResult);
                   return signed;
                 },
                 onSignExtrinsicRequest: (req) async {
                   final signed = (await Navigator.of(context).pushNamed(
                       WalletExtensionSignPage.route,
-                      arguments: req) as ExtensionSignResult);
+                      arguments: {'params': req}) as ExtensionSignResult);
                   return signed;
                 },
               ),

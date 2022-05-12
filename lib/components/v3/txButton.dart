@@ -27,7 +27,7 @@ class TxButton extends StatelessWidget {
     final params = await getTxParams();
     if (params != null) {
       final res = await Navigator.of(context)
-          .pushNamed(TxConfirmPage.route, arguments: params);
+          .pushNamed(TxConfirmPage.route, arguments: {'params': params});
       onFinish!(res as Map<dynamic, dynamic>?);
     }
   }

@@ -169,7 +169,7 @@ class _PluginAddressTextFormFieldState
                   var res = await Navigator.of(context).pushNamed(
                     PluginAccountListPage.route,
                     arguments:
-                        PluginAccountListPageParams(list: widget.localAccounts),
+                        {'params': PluginAccountListPageParams(list: widget.localAccounts)},
                   );
                   if (res != null && widget.onChanged != null) {
                     widget.onChanged!(res as KeyPairData);
