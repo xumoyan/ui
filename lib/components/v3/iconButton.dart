@@ -21,12 +21,6 @@ class IconButton extends StatelessWidget {
             margin: margin,
             width: 32.h,
             height: 32.h,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(!isBlueBg
-                        ? "packages/polkawallet_ui/assets/images/icon_bg_grey.png"
-                        : "packages/polkawallet_ui/assets/images/icon_bg_blue.png"),
-                    fit: BoxFit.fill)),
             child: Center(
               child: icon,
             ),
