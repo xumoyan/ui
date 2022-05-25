@@ -22,7 +22,6 @@ class BackBtn extends StatelessWidget {
           child: IconButton(
         icon: SvgPicture.asset(
           "packages/polkawallet_ui/assets/images/icon_back_24.svg",
-          color: Color(0xFF9F9B97),
         ),
       )),
     );
