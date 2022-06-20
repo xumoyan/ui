@@ -23,6 +23,9 @@ class TextInputWidget extends StatefulWidget {
       this.inputFormatters,
       this.keyboardType,
       this.style,
+      this.displayShadow = true,
+      this.showShadowPadding = true,
+      this.textAlign = TextAlign.start,
       Key? key})
       : super(key: key);
   TextEditingController? controller;
@@ -35,9 +38,12 @@ class TextInputWidget extends StatefulWidget {
   int? maxLines;
   bool? enabled;
   bool readOnly;
+  bool displayShadow;
+  bool showShadowPadding;
   List<TextInputFormatter>? inputFormatters;
   TextInputType? keyboardType;
   TextStyle? style;
+  TextAlign textAlign = TextAlign.start;
 
   @override
   _TextInputWidgetState createState() => _TextInputWidgetState();
@@ -62,12 +68,15 @@ class _TextInputWidgetState extends State<TextInputWidget> {
           decoration: widget.decoration,
           validator: widget.validator,
           obscureText: widget.obscureText,
+          displayShadow: widget.displayShadow,
+          showShadowPadding: widget.showShadowPadding,
           maxLines: widget.maxLines,
           enabled: widget.enabled,
           readOnly: widget.readOnly,
           inputFormatters: widget.inputFormatters,
           keyboardType: widget.keyboardType,
           style: widget.style,
+          textAlign: widget.textAlign,
           hasFocus: this.hasFocus,
         ));
   }
@@ -216,6 +225,8 @@ class TextFormField extends FormField<String> {
       String obscuringCharacter = '•',
       bool obscureText = false,
       bool autocorrect = true,
+      bool displayShadow = true,
+      bool showShadowPadding = true,
       SmartDashesType? smartDashesType,
       SmartQuotesType? smartQuotesType,
       bool enableSuggestions = true,
@@ -266,6 +277,8 @@ class TextFormField extends FormField<String> {
         assert(readOnly != null),
         assert(obscuringCharacter != null && obscuringCharacter.length == 1),
         assert(obscureText != null),
+        assert(displayShadow != null),
+        assert(showShadowPadding != null),
         assert(autocorrect != null),
         assert(enableSuggestions != null),
         assert(autovalidate != null),
@@ -348,13 +361,17 @@ class TextFormField extends FormField<String> {
                           )
                         : Container(),
                     Container(
-                        padding: EdgeInsets.fromLTRB(
-                            16, hasFocus ? 0 : 4, 16, hasFocus ? 4 : 0),
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    "packages/polkawallet_ui/assets/images/bg_input${hasFocus ? '_select' : ''}${maxLines == 3 ? '_x2' : ''}.png"),
-                                fit: BoxFit.fill)),
+                        padding: showShadowPadding
+                            ? EdgeInsets.fromLTRB(
+                                16, hasFocus ? 0 : 4, 16, hasFocus ? 4 : 0)
+                            : null,
+                        decoration: displayShadow
+                            ? BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "packages/polkawallet_ui/assets/images/bg_input${hasFocus ? '_select' : ''}${maxLines == 3 ? '_x2' : ''}.png"),
+                                    fit: BoxFit.fill))
+                            : null,
                         child: Stack(
                           alignment: Alignment.centerRight,
                           children: [
@@ -365,10 +382,13 @@ class TextFormField extends FormField<String> {
                               decoration: effectiveDecoration.copyWith(
                                   errorText: null,
                                   label: null,
-                                  hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: "TitilliumWeb",
-                                      color: Color(0x77565554)),
+                                  hintStyle:
+                                      effectiveDecoration.hintStyle != null
+                                          ? effectiveDecoration.hintStyle
+                                          : TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: "TitilliumWeb",
+                                              color: Color(0x77565554)),
                                   suffix: decoration!.suffix != null
                                       ? Visibility(
                                           child: decoration.suffix!,
@@ -376,7 +396,11 @@ class TextFormField extends FormField<String> {
                                           maintainSize: true,
                                           maintainState: true,
                                           maintainAnimation: true)
-                                      : null),
+                                      : null,
+                                  contentPadding:
+                                      effectiveDecoration.contentPadding != null
+                                          ? effectiveDecoration.contentPadding
+                                          : EdgeInsets.zero),
                               keyboardType: keyboardType,
                               textInputAction: textInputAction,
                               style: style,

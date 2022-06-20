@@ -7,6 +7,8 @@ class RoundedCard extends StatelessWidget {
       this.padding,
       this.child,
       Key? key,
+      this.radius,
+      this.boxShadow,
       this.color})
       : super(key: key);
 
@@ -15,6 +17,8 @@ class RoundedCard extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final Widget? child;
   final Color? color;
+  final BorderRadiusGeometry? radius;
+  final BoxShadow? boxShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +28,22 @@ class RoundedCard extends StatelessWidget {
       child: child,
       decoration: BoxDecoration(
         border: border,
-        borderRadius: const BorderRadius.all(const Radius.circular(10)),
+        borderRadius: radius != null
+            ? radius
+            : const BorderRadius.all(const Radius.circular(8)),
         color: this.color ?? Theme.of(context).cardColor,
         boxShadow: [
-          BoxShadow(
-            color: Color(0x30000000),
-            blurRadius: 2.0, // has the effect of softening the shadow
-            spreadRadius: 0.0, // has the effect of extending the shadow
-            offset: Offset(
-              1.0, // horizontal, move right 10
-              1.0, // vertical, move down 10
-            ),
-          )
+          boxShadow != null
+              ? boxShadow!
+              : BoxShadow(
+                  color: Color(0x30000000),
+                  blurRadius: 2.0, // has the effect of softening the shadow
+                  spreadRadius: 0.0, // has the effect of extending the shadow
+                  offset: Offset(
+                    1.0, // horizontal, move right 10
+                    1.0, // vertical, move down 10
+                  ),
+                )
         ],
       ),
     );

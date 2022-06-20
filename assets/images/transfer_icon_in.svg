@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>转入备份</title>
-    <g id="icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-        <g id="icon_in_24" stroke="#979797" stroke-width="1.5">
-            <g id="转入备份">
-                <polyline id="路径-47" stroke-linejoin="round" points="12 21 4 18 4 10"></polyline>
-                <polyline id="路径-47备份" stroke-linejoin="round" transform="translate(16.000000, 15.500000) scale(-1, 1) translate(-16.000000, -15.500000) " points="20 21 12 18 12 10"></polyline>
-                <line x1="12" y1="21" x2="12" y2="12.5" id="路径-49"></line>
-                <line x1="4" y1="10" x2="12" y2="12.5" id="路径-50"></line>
-                <line x1="12" y1="10" x2="20" y2="12.5" id="路径-50备份" transform="translate(16.000000, 11.250000) scale(-1, 1) translate(-16.000000, -11.250000) "></line>
-                <path d="M4,9 L7,10" id="形状" transform="translate(5.500000, 9.500000) scale(-1, 1) translate(-5.500000, -9.500000) "></path>
-                <path d="M17,9 L20,10" id="形状"></path>
-                <g id="编组" transform="translate(12.000000, 6.750000) scale(1, -1) translate(-12.000000, -6.750000) translate(8.000000, 3.500000)">
-                    <line x1="4" y1="6.5" x2="4" y2="0" id="路径-52"></line>
-                    <line x1="4" y1="0" x2="0" y2="2.5" id="路径-53"></line>
-                    <line x1="8" y1="0" x2="4" y2="2.5" id="路径-53备份" transform="translate(6.000000, 1.250000) scale(-1, 1) translate(-6.000000, -1.250000) "></line>
-                </g>
-            </g>
-        </g>
-    </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="60px" height="60px" viewBox="0 0 60 60" enable-background="new 0 0 60 60" xml:space="preserve">  <image id="image0" width="60" height="60" x="0" y="0"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAA/1BMVEUAAABmmeZbiuZZieRZ
+h+RYiORYiORZh+RYh+Ndi+hZieRYh+NaiOZYh+RYh+RaieRZiORch+Ncj+tZh+NbiONYiONZh+RZ
+h+Rtkv9hkudZh+RZiudZkOlYh+N2nejO3Pbt8vzv9PzN2/ZqlOb19/3///+jve+4zPN1nOe3y/Pg
+6fm2yvK1yvK0yfKzyPKyx/Kfuu79/v7+/v6lvu+Nrev5+v76+/6RsOx9oeny9vzz9/2ApOlwmOfo
+7/vq8PtymudmkeXc5vne5/lnkuVei+TP3PZfjORZiOO6zvO9z/RaiOOnv/CpwfCTsez7/P6Vs+2D
+purx9fxijuSSsexjj+Sh1gJnAAAAHXRSTlMACkZ5oMff7PkWcMI+s/tBw0AZpknwc/0HFcY/F+4K
+t1sAAAABYktHRCXDAckPAAAAB3RJTUUH5gYBCgwTHqlL/gAAAddJREFUSMetl+d2wjAMhU0SICSE
+hr0qSoEApZvuvXdLofT9n6UJ40BimQS796/0HftItnxNCKqQJCvhSFRVo5GwIkshElgxTVfBJVXX
+YoHQuJEARAkj7ouumMCUmVyIptKwUOkUm81kwUfZDIvN5f1YgHwORQuKP+pIKdBssRSMBSgVqXUD
+szbtXTvgnic799RqGRbAVbVMgDq7aj7XsZRvf73Kzk5LelnWPmtTNrk8CzA95yYPbI7ZMg8LUB7B
+Bh9sOGwMvfuVter6RNVaBctIOLNFwyL1hjWnRh3L0WxYxwJNy6UmlqPbc1LFAi033MJy1BCRgBcG
+icj8sMy4i4FghYT54TCJ8MMREuWHo0Tlh1UxWGjb3oK1Nxx13HBnc2t7Z7dNFYxq1d6+hap7QLeK
+PiSHRxh7fEIlKtjxPD2j2fMLOk9GL8bllZe9vkHSJPxK3t652fsHrFMhxjB4rM2zT89Yjs4aQ/Dy
+OmPf3tEUjTkAAT66E/YTj48GIHP0fvUctPfNCBtj48WIQn9gWYM+Kxr3eW5+hsNfVsycGjfgUPI/
+nlixx13IVogZGjErJWbihOyjmHEVs8xEzKyLfRMcQ8f/QRnZMtbXqOyLOlrl/5SNFOw7+Aff9U5b
+OrA4LgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wNi0wMVQxMDoxMjoxOSswMDowMBA+njYAAAAl
+dEVYdGRhdGU6bW9kaWZ5ADIwMjItMDYtMDFUMTA6MTI6MTkrMDA6MDBhYyaKAAAAAElFTkSuQmCC" />
 </svg>

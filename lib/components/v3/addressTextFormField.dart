@@ -156,66 +156,67 @@ class _AddressTextFormFieldState extends State<AddressTextFormField> {
               });
             }
           },
-          child: !hasFocus &&
-                  widget.initialValue != null &&
-                  validatorError == null
-              ? GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      hasFocus = true;
-                    });
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      FocusScope.of(context).requestFocus(_commentFocus);
-                    });
-                  },
-                  child: AddressFormItem(
-                    widget.initialValue,
-                    margin: EdgeInsets.zero,
-                    isGreyBg: false,
-                  ))
-              : v3.TextInputWidget(
-                  controller: _controller,
-                  focusNode: _commentFocus,
-                  onChanged: (value) {
-                    if (validatorError != null &&
-                        _controller.text.trim().toString().length == 0) {
-                      setState(() {
-                        validatorError = null;
-                      });
-                    }
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: v3.InputDecorationV3(
-                    hintText: widget.hintText,
-                    hintStyle: widget.hintStyle,
-                    errorStyle: widget.errorStyle,
-                    suffixIcon: GestureDetector(
-                      onTap: () async {
-                        var res = await Navigator.of(context).pushNamed(
-                          AccountListPage.route,
-                          arguments:
-                              {'params': AccountListPageParams(list: widget.localAccounts)},
-                        );
-                        if (res != null && widget.onChanged != null) {
-                          widget.onChanged!(res as KeyPairData);
+          child:
+              !hasFocus && widget.initialValue != null && validatorError == null
+                  ? GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          hasFocus = true;
+                        });
+                        Future.delayed(const Duration(milliseconds: 100), () {
+                          FocusScope.of(context).requestFocus(_commentFocus);
+                        });
+                      },
+                      child: AddressFormItem(
+                        widget.initialValue,
+                        margin: EdgeInsets.zero,
+                        isGreyBg: false,
+                      ))
+                  : v3.TextInputWidget(
+                      controller: _controller,
+                      focusNode: _commentFocus,
+                      onChanged: (value) {
+                        if (validatorError != null &&
+                            _controller.text.trim().toString().length == 0) {
+                          setState(() {
+                            validatorError = null;
+                          });
                         }
                       },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
-                        child: SvgPicture.asset(
-                          "packages/polkawallet_ui/assets/images/icon_user.svg",
-                          color: Theme.of(context).disabledColor,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: v3.InputDecorationV3(
+                        hintText: widget.hintText,
+                        hintStyle: widget.hintStyle,
+                        errorStyle: widget.errorStyle,
+                        suffixIcon: GestureDetector(
+                          onTap: () async {
+                            var res = await Navigator.of(context).pushNamed(
+                              AccountListPage.route,
+                              arguments: {
+                                'params': AccountListPageParams(
+                                    list: widget.localAccounts)
+                              },
+                            );
+                            if (res != null && widget.onChanged != null) {
+                              widget.onChanged!(res as KeyPairData);
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
+                            child: SvgPicture.asset(
+                              "packages/polkawallet_ui/assets/images/icon_user.svg",
+                              color: Theme.of(context).disabledColor,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value!.trim().length > 0) {
-                      return validatorError;
-                    }
-                    return null;
-                  },
-                )),
+                      validator: (value) {
+                        if (value!.trim().length > 0) {
+                          return validatorError;
+                        }
+                        return null;
+                      },
+                    )),
     ]);
   }
 }

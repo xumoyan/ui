@@ -38,6 +38,43 @@ class Fmt {
     return res;
   }
 
+  static String getRelativeDate(int milliseconds, {String locale = 'en'}) {
+    DateTime now = DateTime.now();
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(milliseconds);
+    List<String> monthList = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'Aguest',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    if (now.microsecondsSinceEpoch - date.microsecondsSinceEpoch > 300000) {
+      if (now.year == date.year) {
+        if (locale.contains('zh')) {
+          return "${date.month}月${date.day}日";
+        } else {
+          return "${monthList[date.month - 1]} ${date.day}";
+        }
+      } else {
+        if (locale.contains('zh')) {
+          return "${date.year}年${date.month}月${date.day}日";
+        } else {
+          return "${monthList[date.month - 1]} ${date.day}, ${date.year}";
+        }
+      }
+    } else {
+      return locale.contains('zh') ? '刚刚' : 'Just Now';
+    }
+  }
+
   static String address(String? addr, {int pad = 6}) {
     if (addr == null || addr.length == 0) {
       return 'address';

@@ -11,6 +11,7 @@ class BackBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         if (onBack != null) {
           onBack!();
@@ -19,11 +20,17 @@ class BackBtn extends StatelessWidget {
         }
       },
       child: Center(
-          child: IconButton(
-        icon: SvgPicture.asset(
-          "packages/polkawallet_ui/assets/images/icon_back_24.svg",
-        ),
-      )),
+          widthFactor: 1,
+          heightFactor: 1,
+          child: Container(
+              width: 44,
+              height: 44,
+              color: Colors.transparent,
+              child: IconButton(
+                icon: SvgPicture.asset(
+                  "packages/polkawallet_ui/assets/images/icon_back_24.svg",
+                ),
+              ))),
     );
   }
 }
