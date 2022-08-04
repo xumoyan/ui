@@ -63,6 +63,8 @@ const Map<String, String> enCommon = {
   'nominate.over': 'Oversubscribed',
   'nominate.inactive': 'Inactive',
   'nominate.waiting': 'Waiting',
+  'send.all': 'All',
+  'available': 'Available: ',
 };
 
 const Map<String, String> zhCommon = {
@@ -126,4 +128,6 @@ const Map<String, String> zhCommon = {
   'nominate.over': '超额认购',
   'nominate.inactive': '不活跃',
   'nominate.waiting': '等待',
+  'send.all': '全部发送',
+  'available': '可用： ',
 };

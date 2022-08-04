@@ -22,6 +22,7 @@ class SendAddressTextFormField extends StatefulWidget {
       this.labelText,
       this.labelStyle,
       this.style,
+      this.notInputAddress = false,
       Key? key})
       : super(key: key);
   final PolkawalletApi api;
@@ -37,6 +38,8 @@ class SendAddressTextFormField extends StatefulWidget {
   final TextStyle? style;
   final String? labelText;
   final TextStyle? labelStyle;
+
+  bool notInputAddress;
 
   @override
   _SendAddressTextFormFieldState createState() =>
@@ -215,80 +218,118 @@ class _SendAddressTextFormFieldState extends State<SendAddressTextFormField> {
             borderRadius: const BorderRadius.all(const Radius.circular(8)),
             color: Colors.white,
           ),
-          child: v3.TextInputWidget(
-            controller: _controller,
-            focusNode: _commentFocus,
-            maxLines: 3,
-            keyboardType: TextInputType.text,
-            displayShadow: false,
-            showShadowPadding: false,
-            onChanged: (value) {
-              final isDeleteBlank =
-                  oldValue.replaceAll(' ', '') == value.replaceAll(' ', '');
-              final startString = isDeleteBlank ? oldValue : value;
-              final startBlankNum = startString.split(' ').length > 1
-                  ? startString.split(' ').length - 1
-                  : 0;
-              String formatString = isDeleteBlank
-                  ? value.replaceRange(_controller.selection.baseOffset - 1,
-                      _controller.selection.extentOffset, '')
-                  : value.replaceAll(' ', '');
-              String address = formatAddress(formatString);
-              var endBlankNum = address.split(' ').length > 1
-                  ? address.split(' ').length - 1
-                  : 0;
-              final isAdd = oldValue.length < value.length;
+          child: widget.notInputAddress
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                            text: formatAddress(
+                                widget.initialValue!.address!),
+                            style: TextStyle(
+                                color: Color(0xFF333333), fontSize: 14),
+                            children: [
+                              TextSpan(
+                                text: '   (lisi)',
+                                style: TextStyle(
+                                    color: Color(0xFF999999), fontSize: 12),
+                              )
+                            ]),
+                      ),
+                    ),
+                    GestureDetector(
+                        child: Container(
+                            padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
+                            child: Image.asset(
+                              'packages/polkawallet_ui/assets/images/icon_input_close_g.png',
+                              height: 22,
+                              width: 22,
+                            )),
+                        onTap: () {
+                          setState(() {
+                            widget.notInputAddress = false;
+                          });
+                        })
+                  ],
+                )
+              : v3.TextInputWidget(
+                  controller: _controller,
+                  focusNode: _commentFocus,
+                  maxLines: 3,
+                  keyboardType: TextInputType.text,
+                  displayShadow: false,
+                  showShadowPadding: false,
+                  onChanged: (value) {
+                    final isDeleteBlank = oldValue.replaceAll(' ', '') ==
+                        value.replaceAll(' ', '');
+                    final startString = isDeleteBlank ? oldValue : value;
+                    final startBlankNum = startString.split(' ').length > 1
+                        ? startString.split(' ').length - 1
+                        : 0;
+                    String formatString = isDeleteBlank
+                        ? value.replaceRange(
+                            _controller.selection.baseOffset - 1,
+                            _controller.selection.extentOffset,
+                            '')
+                        : value.replaceAll(' ', '');
+                    String address = formatAddress(formatString);
+                    var endBlankNum = address.split(' ').length > 1
+                        ? address.split(' ').length - 1
+                        : 0;
+                    final isAdd = oldValue.length < value.length;
 
-              var offset = 0;
-              if (isDeleteBlank && startBlankNum == endBlankNum) {
-                offset = -1;
-              } else {
-                offset = endBlankNum - startBlankNum;
-              }
-              setState(() {
-                _controller.value = TextEditingValue(
-                    text: address,
-                    selection: TextSelection.fromPosition(TextPosition(
-                        affinity: TextAffinity.downstream,
-                        offset: _controller.selection.extentOffset + offset)));
-                oldValue = address;
-                hasValue = value.length > 0 ? true : false;
-              });
+                    var offset = 0;
+                    if (isDeleteBlank && startBlankNum == endBlankNum) {
+                      offset = -1;
+                    } else {
+                      offset = endBlankNum - startBlankNum;
+                    }
+                    setState(() {
+                      _controller.value = TextEditingValue(
+                          text: address,
+                          selection: TextSelection.fromPosition(TextPosition(
+                              affinity: TextAffinity.downstream,
+                              offset: _controller.selection.extentOffset +
+                                  offset)));
+                      oldValue = address;
+                      hasValue = value.length > 0 ? true : false;
+                    });
 
-              if (validatorError != null &&
-                  _controller.text.trim().toString().length == 0) {
-                setState(() {
-                  validatorError = null;
-                });
-              }
-            },
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            style: widget.style,
-            decoration: v3.InputDecorationV3(
-              hintText: widget.hintText,
-              hintStyle: widget.hintStyle,
-              suffixIcon: _controller.text.trim().toString().length != 0
-                  ? GestureDetector(
-                      onTap: () async {
-                        _controller.clear();
-                      },
-                      child: Container(
-                          padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
-                          child: Image.asset(
-                            'packages/polkawallet_ui/assets/images/icon_input_close_g.png',
-                            height: 6,
-                            width: 6,
-                          )),
-                    )
-                  : null,
-            ),
-            validator: (value) {
-              if (value!.trim().length > 0) {
-                return validatorError;
-              }
-              return null;
-            },
-          ))
+                    if (validatorError != null &&
+                        _controller.text.trim().toString().length == 0) {
+                      setState(() {
+                        validatorError = null;
+                      });
+                    }
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: widget.style,
+                  decoration: v3.InputDecorationV3(
+                    hintText: widget.hintText,
+                    hintStyle: widget.hintStyle,
+                    suffixIcon: _controller.text.trim().toString().length != 0
+                        ? GestureDetector(
+                            onTap: () async {
+                              _controller.clear();
+                            },
+                            child: Container(
+                                padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
+                                child: Image.asset(
+                                  'packages/polkawallet_ui/assets/images/icon_input_close_g.png',
+                                  height: 6,
+                                  width: 6,
+                                )),
+                          )
+                        : null,
+                  ),
+                  validator: (value) {
+                    if (value!.trim().length > 0) {
+                      return validatorError;
+                    }
+                    return null;
+                  },
+                ))
     ]);
   }
 }

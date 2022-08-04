@@ -15,6 +15,9 @@ class TxButton extends StatelessWidget {
     this.onFinish,
     this.icon,
     this.color,
+    this.imageType = 1,
+    this.height,
+    this.style,
   });
 
   final String? text;
@@ -22,6 +25,9 @@ class TxButton extends StatelessWidget {
   final Function(Map?)? onFinish;
   final Widget? icon;
   final Color? color;
+  final int imageType;
+  final double? height;
+  final TextStyle? style;
 
   Future<void> _onPressed(BuildContext context) async {
     final params = await getTxParams();
@@ -39,6 +45,9 @@ class TxButton extends StatelessWidget {
           I18n.of(context)!.getDic(i18n_full_dic_ui, 'common')!['tx.submit'] ??
           "",
       icon: icon,
+      imageType: imageType,
+      height: height,
+      style: style,
       onPressed: () {
         _onPressed(context);
       },

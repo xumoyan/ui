@@ -10,6 +10,7 @@ class Button extends StatelessWidget {
       this.icon,
       this.submitting = false,
       this.isBlueBg = true,
+      this.imageType = 1,
       this.height})
       : super(key: key);
   final Function()? onPressed;
@@ -19,6 +20,9 @@ class Button extends StatelessWidget {
   final double? height;
   final TextStyle? style;
   final bool isBlueBg;
+  //imageType 1 default
+  //imageType 1 eos_transfer_btn_normal png
+  final int imageType;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,7 @@ class Button extends StatelessWidget {
         double.infinity,
         height: height ?? 48,
         isBlueBg: isBlueBg,
+        imageType: imageType,
         alignment: Alignment.center,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -57,6 +62,7 @@ class BgContainer extends StatelessWidget {
       this.isBlueBg = false,
       this.alignment,
       this.height,
+      this.imageType = 1,
       Key? key})
       : super(key: key);
 
@@ -66,7 +72,36 @@ class BgContainer extends StatelessWidget {
   final double width;
   final double? height;
   final bool isBlueBg;
+  final int imageType;
   final AlignmentGeometry? alignment;
+
+  List<Widget> getBgImage() {
+    if (imageType == 1) {
+      return [
+        Image.asset(
+          "packages/polkawallet_ui/assets/images/bg_${this.isBlueBg ? "blue" : "grey"}_left.png",
+          fit: BoxFit.fill,
+        ),
+        Expanded(
+            child: Image.asset(
+          "packages/polkawallet_ui/assets/images/bg_${this.isBlueBg ? "blue" : "grey"}_center.png",
+          fit: BoxFit.fill,
+        )),
+        Image.asset(
+          "packages/polkawallet_ui/assets/images/bg_${this.isBlueBg ? "blue" : "grey"}_right.png",
+          fit: BoxFit.fill,
+        )
+      ];
+    } else {
+      return [
+        Expanded(
+            child: Image.asset(
+          "packages/polkawallet_ui/assets/images/eos_transfer_btn_normal.png",
+          fit: BoxFit.fill,
+        ))
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,21 +114,7 @@ class BgContainer extends StatelessWidget {
           Container(
             width: width,
             child: Row(
-              children: [
-                Image.asset(
-                  "packages/polkawallet_ui/assets/images/bg_${this.isBlueBg ? "blue" : "grey"}_left.png",
-                  fit: BoxFit.fill,
-                ),
-                Expanded(
-                    child: Image.asset(
-                  "packages/polkawallet_ui/assets/images/bg_${this.isBlueBg ? "blue" : "grey"}_center.png",
-                  fit: BoxFit.fill,
-                )),
-                Image.asset(
-                  "packages/polkawallet_ui/assets/images/bg_${this.isBlueBg ? "blue" : "grey"}_right.png",
-                  fit: BoxFit.fill,
-                ),
-              ],
+              children: getBgImage(),
             ),
           ),
           Container(

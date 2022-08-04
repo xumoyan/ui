@@ -80,8 +80,9 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
   }
 
   Future<String> _getTxFee({bool reload = false}) async {
-    final TxConfirmParams args =
-        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
+    final TxConfirmParams args = Utils.getParams(
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>)
+        as TxConfirmParams;
     final sender = TxSenderData(
         widget.keyring.current.address, widget.keyring.current.pubKey);
     final txInfo =
@@ -129,8 +130,9 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
 
   Future<void> _showPasswordDialog(BuildContext context) async {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common');
-    final TxConfirmParams args =
-        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
+    final TxConfirmParams args = Utils.getParams(
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>)
+        as TxConfirmParams;
 
     if ((await widget.txDisabledCalls) != null) {
       List moduleCalls = (await widget.txDisabledCalls)![args.module] ?? [];
@@ -152,8 +154,9 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
     bool viaQr = false,
   }) async {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common')!;
-    final TxConfirmParams args =
-        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
+    final TxConfirmParams args = Utils.getParams(
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>)
+        as TxConfirmParams;
 
     if (viaQr && (await widget.txDisabledCalls) != null) {
       List moduleCalls = (await widget.txDisabledCalls)![args.module] ?? [];
@@ -199,8 +202,9 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
 
   bool _checkCallDisabled(List disabledCalls) {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_ui, 'common')!;
-    final TxConfirmParams args =
-        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
+    final TxConfirmParams args = Utils.getParams(
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>)
+        as TxConfirmParams;
     if (disabledCalls.contains(args.call)) {
       showCupertinoDialog(
         context: context,
@@ -254,11 +258,13 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
     print('show qr');
     final signed = await Navigator.of(context).pushNamed(
       QrSenderPage.route,
-      arguments: {'params': QrSenderPageParams(
-        txInfo,
-        args.params,
-        rawParams: args.rawParams,
-      )},
+      arguments: {
+        'params': QrSenderPageParams(
+          txInfo,
+          args.params,
+          rawParams: args.rawParams,
+        )
+      },
     );
     if (signed == null) {
       throw Exception(dic!['tx.cancelled']);
@@ -276,8 +282,9 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
   }
 
   void _updateTxStatus(BuildContext context, String status) {
-    final TxConfirmParams args =
-        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
+    final TxConfirmParams args = Utils.getParams(
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>)
+        as TxConfirmParams;
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -332,8 +339,9 @@ class _TxConfirmPageState extends State<TxConfirmPage> {
     final String symbol = (widget.plugin.networkState.tokenSymbol ?? [''])[0];
     final int decimals = (widget.plugin.networkState.tokenDecimals ?? [12])[0];
 
-    final TxConfirmParams args =
-        Utils.getParams(ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>) as TxConfirmParams;
+    final TxConfirmParams args = Utils.getParams(
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>)
+        as TxConfirmParams;
 
     final bool isObservation = widget.keyring.current.observation ?? false;
     final bool isProxyObservation =

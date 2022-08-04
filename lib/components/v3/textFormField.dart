@@ -26,6 +26,7 @@ class TextInputWidget extends StatefulWidget {
       this.displayShadow = true,
       this.showShadowPadding = true,
       this.textAlign = TextAlign.start,
+      this.strutStyle,
       Key? key})
       : super(key: key);
   TextEditingController? controller;
@@ -44,6 +45,7 @@ class TextInputWidget extends StatefulWidget {
   TextInputType? keyboardType;
   TextStyle? style;
   TextAlign textAlign = TextAlign.start;
+  StrutStyle? strutStyle;
 
   @override
   _TextInputWidgetState createState() => _TextInputWidgetState();
@@ -70,6 +72,7 @@ class _TextInputWidgetState extends State<TextInputWidget> {
           obscureText: widget.obscureText,
           displayShadow: widget.displayShadow,
           showShadowPadding: widget.showShadowPadding,
+          strutStyle: widget.strutStyle,
           maxLines: widget.maxLines,
           enabled: widget.enabled,
           readOnly: widget.readOnly,

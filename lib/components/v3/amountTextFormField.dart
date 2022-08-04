@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:polkawallet_sdk/api/api.dart';
 import 'package:polkawallet_sdk/storage/types/keyPairData.dart';
 import 'package:polkawallet_sdk/utils/i18n.dart';
-import 'package:polkawallet_ui/components/v3/addressFormItem.dart';
 import 'package:polkawallet_ui/components/v3/textFormField.dart' as v3;
-import 'package:polkawallet_ui/pages/v3/accountListPage.dart';
 import 'package:polkawallet_ui/utils/format.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
 import 'package:polkawallet_ui/utils/index.dart';
@@ -17,13 +14,16 @@ class AmountTextFormField extends StatefulWidget {
       this.onChanged,
       this.addressBookPressed,
       this.scanAddressPressed,
-      this.hintText,
+      this.currencyHintText,
+      this.coinHintText,
       this.hintStyle,
       this.errorStyle,
       this.labelText,
       this.labelStyle,
       this.currency = "CNY",
       this.symbol,
+      this.rate = 0,
+      this.balance = '0.00',
       Key? key})
       : super(key: key);
   final PolkawalletApi api;
@@ -33,13 +33,16 @@ class AmountTextFormField extends StatefulWidget {
   final Function()? addressBookPressed;
   final Function()? scanAddressPressed;
 
-  final String? hintText;
+  String? currencyHintText;
+  String? coinHintText;
   final TextStyle? hintStyle;
   final TextStyle? errorStyle;
   final String? labelText;
   final TextStyle? labelStyle;
   final String currency;
-  final String symbol;
+  final String? symbol;
+  final int rate;
+  final String balance;
 
   @override
   _AmountTextFormFieldState createState() => _AmountTextFormFieldState();
@@ -185,14 +188,24 @@ class _AmountTextFormFieldState extends State<AmountTextFormField> {
                           child: v3.TextInputWidget(
                               displayShadow: false,
                               showShadowPadding: false,
+                              strutStyle: StrutStyle(
+                                  leading: 1,
+                                  height: 1,
+                                  forceStrutHeight: true),
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF333333),
+                                  height: 1,
+                                  textBaseline: TextBaseline.ideographic),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               decoration: v3.InputDecorationV3(
-                                hintText: '0.00',
+                                hintText: widget.coinHintText,
                                 isCollapsed: true,
                                 hintStyle: widget.hintStyle,
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 27),
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 19.5),
                                 suffix: _coinAmountController.text
                                             .trim()
                                             .toString()
@@ -200,26 +213,53 @@ class _AmountTextFormFieldState extends State<AmountTextFormField> {
                                         0
                                     ? GestureDetector(
                                         onTap: () async {
-                                          _coinAmountController.clear();
+                                          setState(() {
+                                            _coinAmountController.text = '';
+                                            _currencyAmountController.text = '';
+                                          });
                                         },
                                         child: Container(
-                                            padding: EdgeInsets.fromLTRB(
-                                                12, 12, 0, 12),
+                                            margin: EdgeInsets.only(right: 4),
                                             child: Image.asset(
                                               'packages/polkawallet_ui/assets/images/icon_input_close_g.png',
-                                              height: 6,
-                                              width: 6,
+                                              height: 22,
+                                              width: 22,
+                                              fit: BoxFit.fill,
                                             )),
                                       )
                                     : null,
-                                prefixIcon: Container(
-                                    child: Image.asset(
-                                  Utils.getCoinSymbol(widget.symbol),
-                                  height: 16,
-                                  width: 16,
-                                )),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide.none),
+                                suffixIconConstraints:
+                                    BoxConstraints(maxHeight: 26, maxWidth: 26),
+                                prefixIcon: widget.symbol != null
+                                    ? Container(
+                                        margin:
+                                            EdgeInsets.only(left: 15, right: 4),
+                                        child: Image.asset(
+                                          Utils.getCoinSymbol(widget.symbol!),
+                                          height: 16,
+                                          width: 16,
+                                          fit: BoxFit.fitWidth,
+                                        ))
+                                    : null,
+                                prefixIconConstraints:
+                                    BoxConstraints(maxHeight: 30, maxWidth: 35),
                               ),
                               controller: _coinAmountController,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value.isEmpty) {
+                                    _currencyAmountController.text = '';
+                                  } else {
+                                    _currencyAmountController.text =
+                                        (double.parse(value) *
+                                                widget.rate /
+                                                100)
+                                            .toStringAsFixed(2);
+                                  }
+                                });
+                              },
                               keyboardType: TextInputType.numberWithOptions(
                                   decimal: true))),
                       Center(
@@ -245,17 +285,24 @@ class _AmountTextFormFieldState extends State<AmountTextFormField> {
                           child: v3.TextInputWidget(
                               displayShadow: false,
                               showShadowPadding: false,
+                              strutStyle: StrutStyle(
+                                  leading: 1,
+                                  height: 1,
+                                  forceStrutHeight: true),
                               style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w500,
-                                  color: Color(0xFF333333)),
+                                  color: Color(0xFF333333),
+                                  height: 1,
+                                  textBaseline: TextBaseline.alphabetic),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               decoration: v3.InputDecorationV3(
                                 isCollapsed: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 27),
-                                hintText: '12.00',
+                                isDense: true,
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 19.5),
+                                hintText: widget.currencyHintText,
                                 hintStyle: widget.hintStyle,
                                 suffix: _currencyAmountController.text
                                             .trim()
@@ -264,29 +311,44 @@ class _AmountTextFormFieldState extends State<AmountTextFormField> {
                                         0
                                     ? GestureDetector(
                                         onTap: () async {
-                                          _currencyAmountController.clear();
+                                          setState(() {
+                                            _coinAmountController.text = '';
+                                            _currencyAmountController.text = '';
+                                          });
                                         },
                                         child: Container(
-                                            width: 12,
-                                            padding: EdgeInsets.fromLTRB(
-                                                12, 12, 0, 12),
+                                            margin: EdgeInsets.only(right: 4),
                                             child: Image.asset(
                                               'packages/polkawallet_ui/assets/images/icon_input_close_g.png',
-                                              height: 6,
-                                              width: 6,
+                                              height: 22,
+                                              width: 22,
+                                              fit: BoxFit.fill,
                                             )),
                                       )
                                     : null,
                                 prefixIcon: Container(
+                                    margin: EdgeInsets.only(left: 10),
                                     child: Image.asset(
-                                  Utils.getCurrencySymbol(widget.currency),
-                                  height: 16,
-                                  width: 16,
-                                )),
-                                isDense: true,
+                                      Utils.getCurrencySymbol(widget.currency),
+                                      height: 16,
+                                      width: 16,
+                                    )),
                                 prefixIconConstraints:
                                     BoxConstraints(minWidth: 0, minHeight: 0),
                               ),
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value.isEmpty) {
+                                    _coinAmountController.text = '';
+                                  } else {
+                                    _coinAmountController.text =
+                                        (double.parse(value) /
+                                                widget.rate *
+                                                100)
+                                            .toString();
+                                  }
+                                });
+                              },
                               controller: _currencyAmountController,
                               keyboardType: TextInputType.numberWithOptions(
                                   decimal: true))),
@@ -305,7 +367,11 @@ class _AmountTextFormFieldState extends State<AmountTextFormField> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('可用：0 ETH',
+                      Text(
+                          dic!['available']! +
+                              widget.balance +
+                              ' ' +
+                              widget.symbol!,
                           style: TextStyle(
                               fontSize: 12,
                               color: Color(0xFF999999),
@@ -321,11 +387,23 @@ class _AmountTextFormFieldState extends State<AmountTextFormField> {
                             border: Border.all(
                               color: Color(0x335887e3),
                             )),
-                        child: Text('全部发送',
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: Color(0xFF5887e3),
-                                fontWeight: FontWeight.w400)),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (!widget.balance.isEmpty) {
+                              setState(() {
+                                _coinAmountController.text = widget.balance;
+                                _currencyAmountController.text =
+                                    (double.parse(widget.balance) * widget.rate)
+                                        .toStringAsFixed(2);
+                              });
+                            }
+                          },
+                          child: Text(dic['send.all']!,
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: Color(0xFF5887e3),
+                                  fontWeight: FontWeight.w400)),
+                        ),
                       )
                     ],
                   )),

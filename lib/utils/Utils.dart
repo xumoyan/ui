@@ -27,9 +27,9 @@ class Utils {
   static String getCoinSymbol(String coin) {
     switch (coin.toUpperCase()) {
       case 'DOT':
-        return 'packages/polkawallet_ui/assets/images/usd.png';
+        return 'packages/polkawallet_ui/assets/images/coin_dot.png';
       case 'KSM':
-        return 'packages/polkawallet_ui/assets/images/cny.png';
+        return 'packages/polkawallet_ui/assets/images/coin_ksm.png';
       default:
         return 'packages/polkawallet_ui/assets/images/cny.png';
     }
