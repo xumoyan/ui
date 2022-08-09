@@ -31,7 +31,7 @@ class Utils {
       case 'KSM':
         return 'packages/polkawallet_ui/assets/images/coin_ksm.png';
       default:
-        return 'packages/polkawallet_ui/assets/images/cny.png';
+        return 'packages/polkawallet_ui/assets/images/coin_dot.png';
     }
   }
 }

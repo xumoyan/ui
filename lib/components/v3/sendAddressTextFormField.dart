@@ -225,8 +225,9 @@ class _SendAddressTextFormFieldState extends State<SendAddressTextFormField> {
                     Expanded(
                       child: RichText(
                         text: TextSpan(
-                            text: formatAddress(
-                                widget.initialValue!.address!),
+                            text: formatAddress(widget.initialValue != null
+                                ? widget.initialValue!.address!
+                                : ""),
                             style: TextStyle(
                                 color: Color(0xFF333333), fontSize: 14),
                             children: [
@@ -238,19 +239,21 @@ class _SendAddressTextFormFieldState extends State<SendAddressTextFormField> {
                             ]),
                       ),
                     ),
-                    GestureDetector(
-                        child: Container(
-                            padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
-                            child: Image.asset(
+                    Container(
+                        width: 20,
+                        child: IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              setState(() {
+                                widget.notInputAddress = false;
+                              });
+                            },
+                            icon: Image.asset(
                               'packages/polkawallet_ui/assets/images/icon_input_close_g.png',
-                              height: 22,
-                              width: 22,
-                            )),
-                        onTap: () {
-                          setState(() {
-                            widget.notInputAddress = false;
-                          });
-                        })
+                              width: 20,
+                              height: 20,
+                              fit: BoxFit.fitWidth,
+                            ))),
                   ],
                 )
               : v3.TextInputWidget(
@@ -309,19 +312,20 @@ class _SendAddressTextFormFieldState extends State<SendAddressTextFormField> {
                     hintText: widget.hintText,
                     hintStyle: widget.hintStyle,
                     suffixIcon: _controller.text.trim().toString().length != 0
-                        ? GestureDetector(
-                            onTap: () async {
+                        ? IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
                               _controller.clear();
                             },
-                            child: Container(
-                                padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
-                                child: Image.asset(
-                                  'packages/polkawallet_ui/assets/images/icon_input_close_g.png',
-                                  height: 6,
-                                  width: 6,
-                                )),
-                          )
+                            icon: Image.asset(
+                              'packages/polkawallet_ui/assets/images/icon_input_close_g.png',
+                              width: 20,
+                              height: 20,
+                              fit: BoxFit.fitWidth,
+                            ))
                         : null,
+                    suffixIconConstraints:
+                        BoxConstraints(maxHeight: 20, maxWidth: 20),
                   ),
                   validator: (value) {
                     if (value!.trim().length > 0) {
